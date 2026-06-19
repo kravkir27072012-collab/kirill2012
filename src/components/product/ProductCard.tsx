@@ -37,7 +37,12 @@ export function ProductCard({ product }: ProductCardProps) {
       <Card className="group relative h-full overflow-hidden py-0 gap-0">
         <div className="relative">
           <Link href={`/product/${product.groupId}`} className="block">
-            <ProductImage seed={product.imageSeed} brand={product.brand} className="aspect-square w-full" />
+            <ProductImage
+              seed={product.imageSeed}
+              brand={product.brand}
+              category={product.category}
+              className="aspect-square w-full"
+            />
           </Link>
 
           {product.isBestChoice && (
@@ -73,7 +78,7 @@ export function ProductCard({ product }: ProductCardProps) {
               {product.title}
             </Link>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Размер EU {product.size} · Артикул {product.sku}
+              {[product.size, `Артикул ${product.sku}`].filter(Boolean).join(" · ")}
             </p>
           </div>
 

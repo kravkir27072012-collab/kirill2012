@@ -4,10 +4,10 @@ import { SearchBar } from "./SearchBar";
 
 const QUICK_PICKS = [
   "Nike Air Force 1 белые",
-  "Adidas Samba чёрные",
-  "Air Jordan 1 Chicago",
-  "New Balance 530",
-  "Nike Dunk Low Panda",
+  "iPhone 15 Pro",
+  "Диван угловой",
+  "Холодильник Side-by-Side",
+  "Куртка зимняя мужская",
 ];
 
 export function Hero() {
@@ -20,12 +20,12 @@ export function Hero() {
 
       <div className="mx-auto max-w-3xl text-center">
         <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-          Найдите лучшие кроссовки <br className="hidden sm:block" />
+          Найдите что угодно <br className="hidden sm:block" />
           на маркетплейсах Казахстана
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
-          Сравниваем цену, рейтинг и отзывы с Kaspi, Technodom, Mechta, Wildberries и Ozon —
-          и сразу показываем, где выгоднее и надёжнее.
+          Кроссовки, электроника, мебель, техника и одежда — сравниваем цену, рейтинг и отзывы
+          с Kaspi, Technodom, Mechta, Wildberries и Ozon, и сразу показываем, где выгоднее и надёжнее.
         </p>
 
         <div className="mx-auto mt-8 max-w-xl">

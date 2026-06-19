@@ -52,7 +52,7 @@ export function SearchBar({ defaultValue = "", size = "default", autoFocus, clas
               blurTimeout.current = setTimeout(() => setShowHistory(false), 120);
             }}
             autoFocus={autoFocus}
-            placeholder="Например: Nike Air Force 1 белые 42 размер"
+            placeholder="Например: Nike Air Force 1, iPhone 15 или диван угловой"
             className={cn("pl-11", size === "lg" && "h-14 rounded-3xl text-base shadow-lg")}
           />
         </div>

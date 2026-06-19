@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
-import { MARKETPLACES } from "@/types/marketplace";
+import { MARKETPLACES, PRODUCT_CATEGORIES } from "@/types/marketplace";
 
 const MODEL = "gemini-2.5-flash";
 
-const SYSTEM_PROMPT = `Ты — ассистент поиска кроссовок на сайте KrossKZ, агрегаторе маркетплейсов Казахстана (${MARKETPLACES.map((m) => m.label).join(", ")}).
+const CATEGORY_IDS = PRODUCT_CATEGORIES.map((c) => c.id);
+
+const SYSTEM_PROMPT = `Ты — ассистент поиска товаров на сайте KrossKZ, агрегаторе маркетплейсов Казахстана (${MARKETPLACES.map((m) => m.label).join(", ")}). Каталог покрывает категории: ${PRODUCT_CATEGORIES.map((c) => `${c.label} (${c.id})`).join(", ")}.
 Пользователь описывает, что он хочет, на естественном языке. Извлеки из его сообщения:
-- query: короткая поисковая строка (бренд, модель, цвет) для текстового поиска по каталогу — используй только слова, которые реально могут быть в названии товара (например "Nike Air Force"). Если пользователь не назвал конкретный бренд или модель — верни пустую строку "", чтобы поиск показал все варианты с учётом остальных фильтров. Не используй общие слова вроде "кроссовки", "обувь" — это не названия товаров.
+- query: короткая поисковая строка (бренд, модель, цвет) для текстового поиска по каталогу — используй только слова, которые реально могут быть в названии товара (например "Nike Air Force" или "iPhone 15"). Если пользователь не назвал конкретный бренд или модель — верни пустую строку "", чтобы поиск показал все варианты с учётом остальных фильтров. Не используй общие слова вроде "кроссовки", "телефон", "диван" — это не названия товаров.
+- category: одна из категорий [${CATEGORY_IDS.join(", ")}], если из сообщения понятно, что ищут именно её (например "диван" → furniture, "холодильник" или "стиральная машина" → appliances, "куртка" или "джинсы" → clothing, "телефон" или "ноутбук" → electronics, "кроссовки" или "кеды" → sneakers). Если категория не очевидна — null.
 - priceMax: максимальная цена в тенге, если упомянута, иначе null.
 - priceMin: минимальная цена в тенге, если упомянута, иначе null.
 - originalsOnly: true, если пользователь явно просит только оригиналы / без подделок.
@@ -17,6 +20,7 @@ const SYSTEM_PROMPT = `Ты — ассистент поиска кроссово
 
 interface GeminiParsedResult {
   query: string;
+  category: string | null;
   priceMax: number | null;
   priceMin: number | null;
   originalsOnly: boolean;
@@ -29,6 +33,7 @@ const RESPONSE_SCHEMA = {
   type: "OBJECT",
   properties: {
     query: { type: "STRING" },
+    category: { type: "STRING", nullable: true, enum: CATEGORY_IDS },
     priceMax: { type: "NUMBER", nullable: true },
     priceMin: { type: "NUMBER", nullable: true },
     originalsOnly: { type: "BOOLEAN" },

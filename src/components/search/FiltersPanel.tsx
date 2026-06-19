@@ -1,6 +1,6 @@
 "use client";
 
-import { MARKETPLACES } from "@/types/marketplace";
+import { MARKETPLACES, PRODUCT_CATEGORIES } from "@/types/marketplace";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useFiltersStore } from "@/store/useFiltersStore";
 import { formatPrice } from "@/lib/format";
+import { CATEGORY_ICONS } from "@/lib/categoryIcons";
 import { cn } from "@/lib/utils";
 
 const RATING_OPTIONS = [0, 3.5, 4, 4.5];
@@ -47,6 +48,7 @@ export function FiltersPanel() {
   const setMinRating = useFiltersStore((state) => state.setMinRating);
   const setMinReviews = useFiltersStore((state) => state.setMinReviews);
   const toggleMarketplace = useFiltersStore((state) => state.toggleMarketplace);
+  const toggleCategory = useFiltersStore((state) => state.toggleCategory);
   const resetFilters = useFiltersStore((state) => state.resetFilters);
 
   return (
@@ -65,6 +67,30 @@ export function FiltersPanel() {
           value={[filters.priceMin, filters.priceMax]}
           onValueChange={(value) => setPriceRange([value[0], value[1]])}
         />
+      </div>
+
+      <Separator />
+
+      <div>
+        <Label className="mb-3">Категория</Label>
+        <div className="flex flex-col gap-3">
+          {PRODUCT_CATEGORIES.map((category) => {
+            const Icon = CATEGORY_ICONS[category.id];
+            return (
+              <div key={category.id} className="flex items-center gap-2.5">
+                <Checkbox
+                  id={`category-${category.id}`}
+                  checked={filters.categories.includes(category.id)}
+                  onCheckedChange={() => toggleCategory(category.id)}
+                />
+                <Label htmlFor={`category-${category.id}`} className="flex flex-1 cursor-pointer items-center gap-2 font-normal">
+                  <Icon className="size-4 text-muted-foreground" />
+                  {category.label}
+                </Label>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <Separator />

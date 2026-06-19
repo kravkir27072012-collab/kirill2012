@@ -17,9 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "KrossKZ — поиск лучших кроссовок по маркетплейсам Казахстана",
+  title: "KrossKZ — сравнение цен на маркетплейсах Казахстана",
   description:
-    "Сравниваем цену, рейтинг, отзывы и риск подделки на Kaspi, Technodom, Mechta, Wildberries и Ozon — и находим лучший вариант.",
+    "Кроссовки, электроника, мебель, техника и одежда — сравниваем цену, рейтинг, отзывы и риск подделки на Kaspi, Technodom, Mechta, Wildberries и Ozon, и находим лучший вариант.",
 };
 
 export default function RootLayout({

@@ -1,6 +1,6 @@
-import { MARKETPLACES, type Product, type SearchFilters } from "@/types/marketplace";
+import { MARKETPLACES, PRODUCT_CATEGORIES, type Product, type SearchFilters } from "@/types/marketplace";
 
-/** Builds sensible filter bounds (price range, all marketplaces selected) from a result set. */
+/** Builds sensible filter bounds (price range, all marketplaces + categories selected) from a result set. */
 export function buildDefaultFilters(products: Product[]): SearchFilters {
   const prices = products.map((p) => p.price);
 
@@ -11,6 +11,7 @@ export function buildDefaultFilters(products: Product[]): SearchFilters {
     minRating: 0,
     minReviews: 0,
     marketplaces: MARKETPLACES.map((m) => m.id),
+    categories: PRODUCT_CATEGORIES.map((c) => c.id),
     sortBy: "score",
   };
 }

@@ -63,7 +63,7 @@ export function ComparisonRow({ product }: ComparisonRowProps) {
             <StarRating rating={product.rating} />
             {product.rating.toFixed(1)} · {formatReviewCount(product.reviewCount)}
           </span>
-          <span>Размер EU {product.size}</span>
+          {product.size && <span>{product.size}</span>}
           <span>Артикул {product.sku}</span>
           <span>{product.inStock ? `Доставка ${product.deliveryDays} дн.` : "Нет в наличии"}</span>
         </div>

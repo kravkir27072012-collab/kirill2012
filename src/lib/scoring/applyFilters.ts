@@ -14,6 +14,7 @@ export function applyFilters(products: ScoredProduct[], filters: SearchFilters):
     if (product.rating < filters.minRating) return false;
     if (product.reviewCount < filters.minReviews) return false;
     if (!filters.marketplaces.includes(product.marketplace)) return false;
+    if (!filters.categories.includes(product.category)) return false;
     return true;
   });
 

@@ -29,6 +29,32 @@ export interface AuthenticityAssessment {
   reasons: string[];
 }
 
+export type ProductCategory =
+  | "sneakers"
+  | "electronics"
+  | "furniture"
+  | "appliances"
+  | "clothing";
+
+export interface ProductCategoryMeta {
+  id: ProductCategory;
+  label: string;
+}
+
+export const PRODUCT_CATEGORIES: ProductCategoryMeta[] = [
+  { id: "sneakers", label: "Кроссовки" },
+  { id: "electronics", label: "Электроника" },
+  { id: "furniture", label: "Мебель" },
+  { id: "appliances", label: "Бытовая техника" },
+  { id: "clothing", label: "Одежда и аксессуары" },
+];
+
+export function getCategoryMeta(id: ProductCategory): ProductCategoryMeta {
+  const meta = PRODUCT_CATEGORIES.find((c) => c.id === id);
+  if (!meta) throw new Error(`Unknown category: ${id}`);
+  return meta;
+}
+
 /**
  * Normalized product shape used everywhere in the UI. Every `MarketplaceProvider`
  * is responsible for mapping its own raw (mock-or-real) data into this shape.
@@ -37,15 +63,16 @@ export interface Product {
   id: string;
   /** Marketplace-issued article/SKU code, as shown on the real listing page. */
   sku: string;
-  /** Groups the same sneaker/size/colorway across different marketplaces, powering price comparison. */
+  /** Groups the same model/variant across different marketplaces, powering price comparison. */
   groupId: string;
   title: string;
   brand: string;
   model: string;
-  colorway: string;
-  /** EU size. */
-  size: number;
-  category: "sneakers";
+  /** Color/finish/configuration label (e.g. shoe colorway, phone storage+color, sofa fabric). */
+  variant: string;
+  /** Pre-formatted size/variant label for display (e.g. "EU 42", "M", "256 ГБ"). Not every category has one. */
+  size?: string;
+  category: ProductCategory;
   price: number;
   oldPrice?: number;
   currency: "KZT";
@@ -87,6 +114,7 @@ export interface SearchFilters {
   minRating: number;
   minReviews: number;
   marketplaces: MarketplaceId[];
+  categories: ProductCategory[];
   sortBy: SortOption;
 }
 

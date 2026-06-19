@@ -1,13 +1,13 @@
 import { MARKETPLACES, type MarketplaceId, type Product } from "@/types/marketplace";
-import { SNEAKER_CATALOG, type SneakerModel } from "./catalog";
+import { CATALOG, type CatalogModel } from "./catalog";
 import { clamp, createRng, roundTo } from "./random";
 
 const SELLER_NAMES: Record<MarketplaceId, string[]> = {
-  kaspi: ["SneakerHouse KZ", "Almaty Sport Shop", "Kaspi Магазин Спорта", "ShoesPoint.kz", "Brand Outlet Almaty"],
-  technodom: ["Technodom Lifestyle", "TD Marketplace Seller", "Sport Lab KZ"],
-  mechta: ["Mechta Fashion Store", "Mechta Marketplace Seller", "City Sneakers"],
-  wildberries_kz: ["WB Seller Almaty", "Global Sneaker Trade", "ИП Сапаров Е.", "Fashion Wholesale KZ", "СкладОбувь.kz"],
-  ozon_kz: ["Ozon Fulfillment", "Sneaker Lab Ozon", "ИП Жумабекова А.", "Astana Footwear"],
+  kaspi: ["Kaspi Магазин", "Almaty Trade Shop", "Kaspi Магазин Товаров", "GoodsPoint.kz", "Brand Outlet Almaty"],
+  technodom: ["Technodom Marketplace", "TD Marketplace Seller", "Trade Lab KZ"],
+  mechta: ["Mechta Store", "Mechta Marketplace Seller", "City Goods"],
+  wildberries_kz: ["WB Seller Almaty", "Global Trade KZ", "ИП Сапаров Е.", "Wholesale Market KZ", "СкладТоваров.kz"],
+  ozon_kz: ["Ozon Fulfillment", "Market Lab Ozon", "ИП Жумабекова А.", "Astana Trade"],
 };
 
 const OFFICIAL_STORE_BIAS: Record<MarketplaceId, number> = {
@@ -23,7 +23,7 @@ function coverageCount(popularity: number) {
   return clamp(1 + Math.round(popularity * 3), 1, 5);
 }
 
-function buildListing(model: SneakerModel, marketplaceId: MarketplaceId): Product {
+function buildListing(model: CatalogModel, marketplaceId: MarketplaceId): Product {
   const rng = createRng(`${model.modelId}__${marketplaceId}`);
   const meta = MARKETPLACES.find((m) => m.id === marketplaceId)!;
 
@@ -58,7 +58,7 @@ function buildListing(model: SneakerModel, marketplaceId: MarketplaceId): Produc
     ? clamp(rng.range(3.0, 4.2), 1, 5)
     : clamp(sellerRating + rng.range(-0.4, 0.3), 2.5, 5);
 
-  const size = rng.pick(model.sizes);
+  const size = model.sizes.length > 0 ? rng.pick(model.sizes) : undefined;
   const sellerName = isOfficialStore
     ? `${meta.label} Official Store`
     : rng.pick(SELLER_NAMES[marketplaceId]);
@@ -70,12 +70,12 @@ function buildListing(model: SneakerModel, marketplaceId: MarketplaceId): Produc
     id: `${model.modelId}__${marketplaceId}`,
     sku,
     groupId: model.modelId,
-    title: `${model.brand} ${model.model} «${model.colorway}»`,
+    title: `${model.brand} ${model.model} «${model.variant}»`,
     brand: model.brand,
     model: model.model,
-    colorway: model.colorway,
+    variant: model.variant,
     size,
-    category: "sneakers",
+    category: model.category,
     price,
     oldPrice,
     currency: "KZT",
@@ -97,7 +97,7 @@ function buildListing(model: SneakerModel, marketplaceId: MarketplaceId): Produc
 function generateAllListings(): Product[] {
   const listings: Product[] = [];
 
-  for (const model of SNEAKER_CATALOG) {
+  for (const model of CATALOG) {
     const count = coverageCount(model.popularity);
     const order = createRng(`coverage__${model.modelId}`).shuffle(MARKETPLACES);
     const chosen = order.slice(0, count);
@@ -113,19 +113,13 @@ function generateAllListings(): Product[] {
 /** The full mock catalog, generated once per process/bundle load (deterministic, SSR-safe). */
 export const ALL_LISTINGS: Product[] = generateAllListings();
 
-export function getModelById(modelId: string): SneakerModel | undefined {
-  return SNEAKER_CATALOG.find((m) => m.modelId === modelId);
+export function getModelById(modelId: string): CatalogModel | undefined {
+  return CATALOG.find((m) => m.modelId === modelId);
 }
 
-export function buildSearchHaystack(model: SneakerModel, product: Product): string {
-  return [
-    model.brand,
-    model.model,
-    model.colorway,
-    product.size,
-    product.marketplace,
-    ...model.keywords,
-  ]
+export function buildSearchHaystack(model: CatalogModel, product: Product): string {
+  return [model.brand, model.model, model.variant, product.size, product.marketplace, ...model.keywords]
+    .filter((part): part is string => Boolean(part))
     .join(" ")
     .toLowerCase();
 }

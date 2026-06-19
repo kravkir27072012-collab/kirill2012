@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 
-import type { Product, SearchFilters } from "@/types/marketplace";
+import { getCategoryMeta, type Product, type SearchFilters } from "@/types/marketplace";
 import { rankProducts } from "@/lib/scoring/rank";
 import { applyFilters } from "@/lib/scoring/applyFilters";
 import { useFiltersStore } from "@/store/useFiltersStore";
@@ -27,10 +27,12 @@ export function ResultsView({ query, initialProducts, overrides }: ResultsViewPr
 
   const ranked = useMemo(() => rankProducts(initialProducts), [initialProducts]);
   const visible = useMemo(() => applyFilters(ranked, filters), [ranked, filters]);
+  const categoryLabel =
+    filters.categories.length === 1 ? getCategoryMeta(filters.categories[0]).label : undefined;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <ResultsHeader count={visible.length} query={query} />
+      <ResultsHeader count={visible.length} query={query} categoryLabel={categoryLabel} />
 
       <div className="flex gap-8">
         <aside className="hidden w-72 shrink-0 lg:block">

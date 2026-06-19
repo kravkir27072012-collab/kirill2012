@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 
-import { MARKETPLACES } from "@/types/marketplace";
+import { MARKETPLACES, PRODUCT_CATEGORIES } from "@/types/marketplace";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -25,6 +25,7 @@ export function MobileFiltersSheet() {
     (filters.minRating > 0 ? 1 : 0) +
     (filters.minReviews > 0 ? 1 : 0) +
     (filters.marketplaces.length < MARKETPLACES.length ? 1 : 0) +
+    (filters.categories.length < PRODUCT_CATEGORIES.length ? 1 : 0) +
     (filters.priceMin > priceBounds.min || filters.priceMax < priceBounds.max ? 1 : 0);
 
   return (

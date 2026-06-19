@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import type { MarketplaceId, Product, SearchFilters, SortOption } from "@/types/marketplace";
+import type { MarketplaceId, Product, ProductCategory, SearchFilters, SortOption } from "@/types/marketplace";
 import { buildDefaultFilters } from "@/lib/scoring/defaultFilters";
 
 interface PriceBounds {
@@ -20,6 +20,7 @@ interface FiltersState {
   setMinRating: (value: number) => void;
   setMinReviews: (value: number) => void;
   toggleMarketplace: (id: MarketplaceId) => void;
+  toggleCategory: (id: ProductCategory) => void;
   setSortBy: (value: SortOption) => void;
   resetFilters: () => void;
 }
@@ -57,6 +58,15 @@ export const useFiltersStore = create<FiltersState>((set) => ({
         ? state.filters.marketplaces.filter((m) => m !== id)
         : [...state.filters.marketplaces, id];
       return { filters: { ...state.filters, marketplaces } };
+    }),
+
+  toggleCategory: (id) =>
+    set((state) => {
+      const isSelected = state.filters.categories.includes(id);
+      const categories = isSelected
+        ? state.filters.categories.filter((c) => c !== id)
+        : [...state.filters.categories, id];
+      return { filters: { ...state.filters, categories } };
     }),
 
   setSortBy: (sortBy) => set((state) => ({ filters: { ...state.filters, sortBy } })),

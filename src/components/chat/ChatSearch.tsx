@@ -16,6 +16,7 @@ interface ChatMessage {
 
 interface ChatSearchResult {
   query: string;
+  category: string | null;
   priceMax: number | null;
   priceMin: number | null;
   originalsOnly: boolean;
@@ -26,8 +27,8 @@ interface ChatSearchResult {
 
 const EXAMPLES = [
   "Хочу кроссовки для бега до 40000 тенге",
-  "Найди оригинальные Nike с рейтингом от 4.5",
-  "Что-нибудь стильное и подешевле",
+  "Найди диван подешевле",
+  "Холодильник с рейтингом от 4.5",
 ];
 
 export function ChatSearch() {
@@ -62,6 +63,7 @@ export function ChatSearch() {
       setMessages((prev) => [...prev, { role: "assistant", text: result.reply }]);
 
       const params = new URLSearchParams({ q: result.query });
+      if (result.category) params.set("category", result.category);
       if (result.priceMax != null) params.set("priceMax", String(result.priceMax));
       if (result.priceMin != null) params.set("priceMin", String(result.priceMin));
       if (result.originalsOnly) params.set("originalsOnly", "true");
@@ -87,7 +89,7 @@ export function ChatSearch() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        aria-label="ИИ-поиск кроссовок"
+        aria-label="ИИ-поиск товаров"
         className="fixed bottom-6 right-6 z-40 flex size-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-105 active:scale-95"
       >
         <MessageCircle className="size-6" />
@@ -101,7 +103,7 @@ export function ChatSearch() {
               Умный поиск
             </SheetTitle>
             <SheetDescription>
-              Опиши, что ищешь, своими словами — подберём фильтры и покажем подходящие кроссовки.
+              Опиши, что ищешь, своими словами — подберём фильтры и покажем подходящие товары.
             </SheetDescription>
           </SheetHeader>
 
@@ -149,7 +151,7 @@ export function ChatSearch() {
             <Input
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Хочу кроссовки для бега за 40000 тенге"
+              placeholder="Например: диван подешевле или iPhone 15"
               disabled={isLoading}
               autoFocus
             />

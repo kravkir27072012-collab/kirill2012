@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Footprints, Heart } from "lucide-react";
 
 import { ThemeToggle } from "./ThemeToggle";
+import { CATEGORY_ICONS } from "@/lib/categoryIcons";
+import { PRODUCT_CATEGORIES } from "@/types/marketplace";
 import { useFavoritesStore } from "@/store/useFavoritesStore";
 import { useIsClient } from "@/hooks/useIsClient";
 import { cn } from "@/lib/utils";
@@ -42,6 +44,22 @@ export function Navbar() {
             </Link>
             <ThemeToggle />
           </nav>
+        </div>
+
+        <div className="mx-auto flex max-w-7xl items-center gap-1.5 overflow-x-auto px-4 pb-3 sm:px-6 lg:px-8">
+          {PRODUCT_CATEGORIES.map((category) => {
+            const Icon = CATEGORY_ICONS[category.id];
+            return (
+              <Link
+                key={category.id}
+                href={`/results?category=${category.id}`}
+                className="flex shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3.5 py-1.5 text-sm text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+              >
+                <Icon className="size-3.5" />
+                {category.label}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </header>

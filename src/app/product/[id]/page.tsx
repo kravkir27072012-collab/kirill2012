@@ -37,13 +37,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </Link>
 
       <div className="mt-4 grid gap-8 sm:grid-cols-[20rem_1fr]">
-        <ProductImage seed={best.imageSeed} brand={best.brand} className="aspect-square w-full rounded-2xl" />
+        <ProductImage
+          seed={best.imageSeed}
+          brand={best.brand}
+          category={best.category}
+          className="aspect-square w-full rounded-2xl"
+        />
 
         <div className="flex flex-col">
           <h1 className="text-3xl font-bold tracking-tight">
             {best.brand} {best.model}
           </h1>
-          <p className="mt-1 text-muted-foreground">{best.colorway}</p>
+          <p className="mt-1 text-muted-foreground">{best.variant}</p>
 
           <div className="mt-3">
             <AuthenticityBadge assessment={best.authenticity} />
