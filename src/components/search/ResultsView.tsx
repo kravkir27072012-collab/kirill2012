@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 
-import type { Product } from "@/types/marketplace";
+import type { Product, SearchFilters } from "@/types/marketplace";
 import { rankProducts } from "@/lib/scoring/rank";
 import { applyFilters } from "@/lib/scoring/applyFilters";
 import { useFiltersStore } from "@/store/useFiltersStore";
@@ -13,14 +13,15 @@ import { ProductGrid } from "@/components/product/ProductGrid";
 interface ResultsViewProps {
   query: string;
   initialProducts: Product[];
+  overrides?: Partial<SearchFilters>;
 }
 
-export function ResultsView({ query, initialProducts }: ResultsViewProps) {
+export function ResultsView({ query, initialProducts, overrides }: ResultsViewProps) {
   const filters = useFiltersStore((state) => state.filters);
   const initialize = useFiltersStore((state) => state.initialize);
 
   useEffect(() => {
-    initialize(initialProducts);
+    initialize(initialProducts, overrides);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialProducts]);
 

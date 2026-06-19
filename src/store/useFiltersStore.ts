@@ -14,7 +14,7 @@ interface FiltersState {
   priceBounds: PriceBounds;
   defaults: SearchFilters;
   /** Re-baselines filters (price slider bounds, all marketplaces on) for a freshly loaded search. */
-  initialize: (products: Product[]) => void;
+  initialize: (products: Product[], overrides?: Partial<SearchFilters>) => void;
   setPriceRange: (range: [number, number]) => void;
   setOriginalsOnly: (value: boolean) => void;
   setMinRating: (value: number) => void;
@@ -31,12 +31,12 @@ export const useFiltersStore = create<FiltersState>((set) => ({
   priceBounds: { min: INITIAL_DEFAULTS.priceMin, max: INITIAL_DEFAULTS.priceMax },
   defaults: INITIAL_DEFAULTS,
 
-  initialize: (products) => {
+  initialize: (products, overrides) => {
     const defaults = buildDefaultFilters(products);
     set({
       defaults,
       priceBounds: { min: defaults.priceMin, max: defaults.priceMax },
-      filters: defaults,
+      filters: overrides ? { ...defaults, ...overrides } : defaults,
     });
   },
 
