@@ -35,6 +35,8 @@ export interface AuthenticityAssessment {
  */
 export interface Product {
   id: string;
+  /** Marketplace-issued article/SKU code, as shown on the real listing page. */
+  sku: string;
   /** Groups the same sneaker/size/colorway across different marketplaces, powering price comparison. */
   groupId: string;
   title: string;

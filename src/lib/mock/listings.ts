@@ -63,8 +63,12 @@ function buildListing(model: SneakerModel, marketplaceId: MarketplaceId): Produc
     ? `${meta.label} Official Store`
     : rng.pick(SELLER_NAMES[marketplaceId]);
 
+  // Drawn last so it doesn't shift the sequence of earlier draws above.
+  const sku = String(rng.int(100000000, 999999999));
+
   return {
     id: `${model.modelId}__${marketplaceId}`,
+    sku,
     groupId: model.modelId,
     title: `${model.brand} ${model.model} «${model.colorway}»`,
     brand: model.brand,

@@ -72,7 +72,9 @@ export function ProductCard({ product }: ProductCardProps) {
             <Link href={`/product/${product.groupId}`} className="line-clamp-2 font-semibold leading-snug hover:underline">
               {product.title}
             </Link>
-            <p className="mt-0.5 text-xs text-muted-foreground">Размер EU {product.size}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Размер EU {product.size} · Артикул {product.sku}
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-1.5">
