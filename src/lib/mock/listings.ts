@@ -86,7 +86,10 @@ function buildListing(model: CatalogModel, marketplaceId: MarketplaceId): Produc
     rating: Number(rating.toFixed(1)),
     reviewCount: Math.round(reviewCount),
     imageSeed: model.modelId,
-    url: `https://${meta.domain}/product/${model.modelId}-${marketplaceId}`,
+    // No real listing exists behind this mock product, so we link to the
+    // marketplace's real homepage instead of a fabricated product path —
+    // a fake deep link would just 404 on the real site.
+    url: `https://${meta.domain}`,
     isOfficialStore,
     inStock: rng.bool(0.93),
     deliveryDays: isOfficialStore ? rng.int(1, 3) : rng.int(2, 9),
